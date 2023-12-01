@@ -1,0 +1,16 @@
+{
+  "name": "advent-of-code-2023",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.10.1",
+    "tsx": "^4.6.1",
+    "vitest": "^0.34.6"
+  }
+}
