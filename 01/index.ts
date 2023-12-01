@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { getLineValue } from './getLineValue';
 
 async function getData(): Promise<string[]> {
   return new Promise((resolve) => {
@@ -12,21 +13,6 @@ async function getData(): Promise<string[]> {
       resolve(data.split('\n'));
     });
   });
-}
-
-const matchFirst = /^\D*(?<first>\d)/;
-const matchLast = /(?<last>\d)\D*$/;
-
-function getLineValue(line: string) {
-  const { first } = matchFirst.exec(line)?.groups ?? {};
-  const { last } = matchLast.exec(line)?.groups ?? {};
-
-  const lineTotal = Number(first + last);
-  if (isNaN(lineTotal)) {
-    throw Error(`unable to calculate: ${first} + ${last} from ${line}`);
-  }
-
-  return lineTotal;
 }
 
 async function main() {
