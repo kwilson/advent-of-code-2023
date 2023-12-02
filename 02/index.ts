@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { GameSet, parseGame } from './parseGame';
 import { isGamePossible } from './isGamePossible';
+import { getMinimumSet } from './getMinimimSet';
 
 async function getData(): Promise<string[]> {
   return new Promise((resolve) => {
@@ -30,7 +31,13 @@ async function main() {
     .filter((game) => isGamePossible(game.sets, available))
     .reduce((total, { id }) => total + id, 0);
 
-  console.log({ sumOfInvalidIds });
+  const sumOfMinimumPowers = games
+    .map((game) => getMinimumSet(game.sets))
+    .reduce((total, { red, green, blue }) => {
+      return total + red * green * blue;
+    }, 0);
+
+  console.log({ sumOfInvalidIds, sumOfMinimumPowers });
 }
 
 main();
