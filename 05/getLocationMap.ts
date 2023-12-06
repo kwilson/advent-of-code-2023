@@ -2,7 +2,18 @@ import { Seeds, ValueMap } from './parseInput';
 
 type Output = [string, number];
 
-function getMapping(
+function getMapValue(value: number, map: ValueMap): number {
+  const thisRange = map.ranges.find(
+    ({ from, range }) => value >= from && value < from + range,
+  );
+  if (thisRange) {
+    return value + thisRange.to - thisRange.from;
+  }
+
+  return value;
+}
+
+export function getMapping(
   type: string,
   targetType: string,
   value: number,
@@ -15,17 +26,9 @@ function getMapping(
 
   while (currentType !== targetType) {
     const map = maps[currentType];
+
     currentType = map.to;
-
-    let found = false;
-
-    for (let rangeIndex = 0; rangeIndex < map.ranges.length; rangeIndex++) {
-      const { from, to, range } = map.ranges[rangeIndex];
-      if (!found && currentValue >= from && currentValue < from + range) {
-        currentValue = currentValue + to - from;
-        found = true;
-      }
-    }
+    currentValue = getMapValue(currentValue, map);
 
     output.push([currentType, currentValue]);
   }
