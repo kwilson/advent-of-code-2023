@@ -17,6 +17,18 @@ async function main() {
   const permutations = races?.map(getPermutations);
   const product = permutations?.reduce((a, b) => a * b);
   console.log({ product });
+
+  const [badKerningTime, badKermingDistance] = data.map((line) =>
+    Number(line.split(':').at(1)?.trim().split(/\s+/).join('')),
+  );
+
+  const badKerningRace: Race = {
+    distance: badKermingDistance,
+    time: badKerningTime,
+  };
+  const badKerningPermutations = getPermutations(badKerningRace);
+
+  console.log({ badKerningPermutations });
 }
 
 main();
