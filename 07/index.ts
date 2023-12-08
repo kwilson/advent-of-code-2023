@@ -5,19 +5,23 @@ import { compareHands } from './compareHands';
 
 async function getData(): Promise<string[]> {
   return new Promise((resolve) => {
-    fs.readFile(path.resolve(__dirname, './input.txt'), 'utf8', (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
+    fs.readFile(
+      path.resolve(__dirname, './input.txt'),
+      'utf8',
+      (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
 
-      resolve(data.split('\n').filter(Boolean));
-    });
+        resolve(data.split('\n').filter(Boolean));
+      },
+    );
   });
 }
 
 function sortHands(a: Hand, b: Hand): number {
-  return compareHands(a.cards, b.cards);
+  return compareHands(a.cards, b.cards, 'J');
 }
 
 async function main() {

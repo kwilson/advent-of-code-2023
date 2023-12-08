@@ -8,13 +8,28 @@ export const handType = {
   highCard: 0,
 } as const;
 
-export function getHandType(hand: string[]): number {
+export function getHandType(hand: string[], wildcard?: string): number {
   const valuesMap = new Map<string, number>();
   hand.forEach((card) => {
     valuesMap.set(card, (valuesMap.get(card) ?? 0) + 1);
   });
 
-  const values = [...valuesMap.values()];
+  const wildcardCount =
+    (wildcard && valuesMap.has(wildcard) && Number(valuesMap.get(wildcard))) ||
+    0;
+  if (wildcard) {
+    valuesMap.delete(wildcard);
+  }
+
+  const values = [...valuesMap.values()].sort().reverse();
+
+  // If every card was a wildcard, prime the value
+  if (values.length === 0) {
+    values.push(0);
+  }
+
+  // distribute the wildcards
+  values[0] = values[0] + wildcardCount;
 
   if (values.includes(5)) {
     return handType.fiveOfKind;

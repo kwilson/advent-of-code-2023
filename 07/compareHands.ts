@@ -8,15 +8,19 @@ const alpha: [string, number][] = [
   ['A', 14],
   ['K', 13],
   ['Q', 12],
-  ['J', 11],
+  ['J', 0], // now a joker
   ['T', 10],
 ];
 
 const valueMap = new Map<string, number>([...numeric, ...alpha]);
 
-export function compareHands(a: string[], b: string[]): number {
-  const typeA = getHandType(a);
-  const typeB = getHandType(b);
+export function compareHands(
+  a: string[],
+  b: string[],
+  wildcard?: string,
+): number {
+  const typeA = getHandType(a, wildcard);
+  const typeB = getHandType(b, wildcard);
 
   if (typeA !== typeB) {
     return typeA - typeB > 0 ? 1 : -1;
