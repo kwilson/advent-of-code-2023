@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { parseInput } from './parseInput';
 import { getSteps } from './getSteps';
+import { getGhostSteps } from './getGhostSteps';
 
 async function getData(): Promise<string[]> {
   return new Promise((resolve) => {
@@ -11,7 +12,7 @@ async function getData(): Promise<string[]> {
         return;
       }
 
-      resolve(data.split('\n').filter(Boolean));
+      resolve(data.split('\n'));
     });
   });
 }
@@ -19,8 +20,12 @@ async function getData(): Promise<string[]> {
 async function main() {
   const map = parseInput(await getData());
   const steps = getSteps('AAA', 'ZZZ', map);
+  const ghostSteps = getGhostSteps('A', 'Z', map);
 
-  console.log({ steps: steps.length - 1 });
+  console.log({
+    steps: steps.length - 1,
+    ghostSteps,
+  });
 }
 
 main();
