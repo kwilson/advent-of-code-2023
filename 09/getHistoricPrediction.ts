@@ -1,4 +1,4 @@
-export function getPrediction(input: number[]): number {
+export function getHistoricPrediction(input: number[]): number {
   const differences: number[] = [];
 
   for (let i = 1; i < input.length; i++) {
@@ -9,8 +9,8 @@ export function getPrediction(input: number[]): number {
   }
 
   if (differences.every((x) => x === differences[0])) {
-    return (input.at(-1) ?? NaN) + differences[0];
+    return (input.at(0) ?? NaN) - differences[0];
   }
 
-  return (input.at(-1) ?? NaN) + getPrediction(differences);
+  return (input.at(0) ?? NaN) - getHistoricPrediction(differences);
 }
