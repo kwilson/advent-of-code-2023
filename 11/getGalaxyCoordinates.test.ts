@@ -37,8 +37,8 @@ const input = `
 // 8....9.......
 
 test('result is as expected', () => {
-  const expanded = getExpandedUniverse(parseUniverse(input));
-  const result = getGalaxyCoordinates(expanded);
+  const { expandedUniverse } = getExpandedUniverse(parseUniverse(input));
+  const result = getGalaxyCoordinates(expandedUniverse);
 
   const expected: [number, number][] = [
     [0, 4],

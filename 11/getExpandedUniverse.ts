@@ -2,7 +2,7 @@ import { Universe } from './types';
 
 const empty = '.';
 
-export function getExpandedUniverse(universe: Universe): Universe {
+export function getExpandedUniverse(universe: Universe) {
   const emptyRows = universe.reduce<number[]>((emptyRows, row, rowIndex) => {
     if (row.every((x) => x === empty)) {
       emptyRows.push(rowIndex);
@@ -19,28 +19,33 @@ export function getExpandedUniverse(universe: Universe): Universe {
     }
   }
 
-  return universe.reduce<Universe>((expandedUniverse, row, rowIndex) => {
-    const expandedRow = row.reduce<Universe[0]>(
-      (expandedColumn, column, columnIndex) => {
-        // Push the original
-        expandedColumn.push(column);
-
-        // Push the duplicate
-        if (emptyColumns.includes(columnIndex)) {
+  const expandedUniverse = universe.reduce<Universe>(
+    (expandedUniverse, row, rowIndex) => {
+      const expandedRow = row.reduce<Universe[0]>(
+        (expandedColumn, column, columnIndex) => {
+          // Push the original
           expandedColumn.push(column);
-        }
 
-        return expandedColumn;
-      },
-      [],
-    );
+          // Push the duplicate
+          if (emptyColumns.includes(columnIndex)) {
+            expandedColumn.push(column);
+          }
 
-    expandedUniverse.push(expandedRow);
+          return expandedColumn;
+        },
+        [],
+      );
 
-    if (emptyRows.includes(rowIndex)) {
       expandedUniverse.push(expandedRow);
-    }
 
-    return expandedUniverse;
-  }, []);
+      if (emptyRows.includes(rowIndex)) {
+        expandedUniverse.push(expandedRow);
+      }
+
+      return expandedUniverse;
+    },
+    [],
+  );
+
+  return { expandedUniverse, emptyRows, emptyColumns };
 }

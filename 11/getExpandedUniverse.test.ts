@@ -41,7 +41,9 @@ test('galaxy is expanded as expected', () => {
   const universe = parseUniverse(input);
   const expectedUniverse = parseUniverse(expected);
 
-  const result = getExpandedUniverse(universe);
+  const { expandedUniverse } = getExpandedUniverse(universe);
 
-  expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedUniverse));
+  expect(JSON.stringify(expandedUniverse)).toEqual(
+    JSON.stringify(expectedUniverse),
+  );
 });

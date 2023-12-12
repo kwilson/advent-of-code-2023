@@ -3,6 +3,8 @@ import path from 'node:path';
 import { getExpandedUniverse } from './getExpandedUniverse';
 import { getGalaxyCoordinates } from './getGalaxyCoordinates';
 import { getDistanceBetweenPoints } from './getDistanceBetweenPoints';
+import { Universe } from './types';
+import { getAdjustedDistanceBetweenPoints } from './getAdjustedDistanceBetweenPoints';
 
 async function getData(): Promise<string[]> {
   return new Promise((resolve) => {
@@ -19,25 +21,42 @@ async function getData(): Promise<string[]> {
 
 async function main() {
   const data = await getData();
-  const universe = getExpandedUniverse(data.map((row) => row.trim().split('')));
-  const galaxies = getGalaxyCoordinates(universe);
+  const initialUniverse: Universe = data.map((row) => row.trim().split(''));
+  const { expandedUniverse, emptyRows, emptyColumns } =
+    getExpandedUniverse(initialUniverse);
 
-  let pairs = 0;
-  const distances = galaxies.reduce((total, galaxy, index) => {
-    const otherGalaxies = galaxies.slice(index + 1);
+  const galaxies = getGalaxyCoordinates(initialUniverse);
+  const expandedGalaxies = getGalaxyCoordinates(expandedUniverse);
+
+  const distances = expandedGalaxies.reduce((total, galaxy, index) => {
+    const otherGalaxies = expandedGalaxies.slice(index + 1);
 
     otherGalaxies.forEach((otherGalaxy) => {
       total += getDistanceBetweenPoints(galaxy, otherGalaxy);
-      pairs++;
+    });
+
+    return total;
+  }, 0);
+
+  const adjustedDistances = galaxies.reduce((total, galaxy, index) => {
+    const otherGalaxies = galaxies.slice(index + 1);
+
+    otherGalaxies.forEach((otherGalaxy) => {
+      total += getAdjustedDistanceBetweenPoints(
+        galaxy,
+        otherGalaxy,
+        emptyRows,
+        emptyColumns,
+        1_000_000,
+      );
     });
 
     return total;
   }, 0);
 
   console.log({
-    galaxies,
     distances,
-    pairs,
+    adjustedDistances,
   });
 }
 
